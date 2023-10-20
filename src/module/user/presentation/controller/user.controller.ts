@@ -74,8 +74,8 @@ export class UserController {
                 secure: appConfig.get("/appEnv") === "production",
                 sameSite: "lax",
             });
-            logger.info("user has been successfully logged in");
-            buildResponseSuccess(res, StatusCodes.OK, "user berhasil login", {
+            logger.info("User has been successfully logged in");
+            buildResponseSuccess(res, StatusCodes.OK, "User berhasil login", {
                 access_token: accessToken,
             });
         } catch (error) {
@@ -92,10 +92,10 @@ export class UserController {
             const logoutHandler = new LogoutCommandHandler(this.userRepository);
             await logoutHandler.execute(validData);
             res.clearCookie("access_token");
-            logger.info("user has been successfully logged out");
-            buildResponseSuccess(res, StatusCodes.OK, "user berhasil logout");
+            logger.info("User has been successfully logged out");
+            buildResponseSuccess(res, StatusCodes.OK, "User berhasil logout");
         } catch (error) {
-            logger.error("user failed to log out");
+            logger.error("User failed to log out");
             const appErr = error as ApplicationError;
             buildResponseError(res, appErr.code, appErr.message);
         }
@@ -108,7 +108,7 @@ export class UserController {
                 id: string;
             };
             const user = await this.userQueryHandler.getUserById(validData.id);
-            logger.info("user data has been successfully retrieved");
+            logger.info("User data has been successfully retrieved");
             buildResponseSuccess(
                 res,
                 StatusCodes.OK,
@@ -127,10 +127,10 @@ export class UserController {
         try {
             const validData = validate(body, addUserMapper) as AddUserCommand;
             if (await this.userQueryHandler.getUserByEmail(validData.email)) {
-                logger.error("email has been registered");
+                logger.error("Email has been registered");
                 throw new ApplicationError(
                     StatusCodes.BAD_REQUEST,
-                    "email telah terdaftar",
+                    "Email telah terdaftar",
                 );
             }
             const addUserHandler = new AddUserCommandHandler(
@@ -138,14 +138,14 @@ export class UserController {
                 this.passwordService,
             );
             await addUserHandler.execute(validData);
-            logger.info("user data has been successfully added");
+            logger.info("User data has been successfully added");
             buildResponseSuccess(
                 res,
                 StatusCodes.CREATED,
                 DefaultMessage.SUC_ADD,
             );
         } catch (error) {
-            logger.error("failed to add new user data");
+            logger.error("Failed to add new user data");
             const appErr = error as ApplicationError;
             buildResponseError(res, appErr.code, appErr.message);
         }
@@ -154,7 +154,7 @@ export class UserController {
     async viewAllUsers(req: Request, res: Response): Promise<void> {
         try {
             const users = await this.userQueryHandler.getAllUsers();
-            logger.info("all user data has been successfully retrieved");
+            logger.info("All user data has been successfully retrieved");
             buildResponseSuccess(
                 res,
                 StatusCodes.OK,
@@ -162,7 +162,7 @@ export class UserController {
                 users,
             );
         } catch (error) {
-            logger.error("failed to get all user data");
+            logger.error("Failed to get all user data");
             const appErr = error as ApplicationError;
             buildResponseError(res, appErr.code, appErr.message);
         }
@@ -182,7 +182,7 @@ export class UserController {
                 this.passwordService,
             );
             await updateUserHandler.execute(validData);
-            logger.info("user data has been successfully updated");
+            logger.info("User data has been successfully updated");
             buildResponseSuccess(
                 res,
                 StatusCodes.CREATED,
@@ -206,21 +206,21 @@ export class UserController {
             const user = await this.userQueryHandler.getUserById(validData.id);
             if (validData.id == selfId) {
                 logger.error(
-                    "users cannot delete their own data or manager data",
+                    "Users cannot delete their own data or manager data",
                 );
                 throw new ApplicationError(
                     StatusCodes.FORBIDDEN,
-                    "user tidak dapat menghapus data sendiri atau data manajer",
+                    "User tidak dapat menghapus data sendiri atau data manajer",
                 );
             }
             const deleteUserHandler = new DeleteUserCommandHandler(
                 this.userRepository,
             );
             await deleteUserHandler.execute(validData);
-            logger.info("user data has been successfully removed");
+            logger.info("User data has been successfully removed");
             buildResponseSuccess(res, StatusCodes.OK, DefaultMessage.SUC_DEL);
         } catch (error) {
-            logger.error("failed to delete user data");
+            logger.error("Failed to delete user data");
             const appErr = error as ApplicationError;
             buildResponseError(res, appErr.code, appErr.message);
         }

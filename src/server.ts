@@ -30,7 +30,7 @@ export class AppServer {
         this.app.use("/users", setUserRoutes(this.pgDatabase.dbConn));
 
         this.app.get("/health-check", (req: Request, res: Response) => {
-            buildResponseSuccess(res, 200, "welcome to PIKTIFIN");
+            buildResponseSuccess(res, 200, "welcome to ETS Pemrgoraman Web F");
         });
 
         this.app.all("*", (req: Request, res: Response) => {

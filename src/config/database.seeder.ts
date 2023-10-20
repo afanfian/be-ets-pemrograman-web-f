@@ -16,6 +16,7 @@ export const seedDatabase = async (dbConn: Sequelize) => {
             },
         });
         await dbConn.models["score"].findOrCreate({
+            where: { id: "5a53d571-f85b-4373-8935-bc7eefab74f6" },
             defaults: {
                 nama: "Fian",
                 score: "123",

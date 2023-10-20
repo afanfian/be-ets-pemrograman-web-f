@@ -7,12 +7,15 @@ import { ScoreQueryHandler } from "../infrastructure/storage/query";
 import { ScoreController } from "./controller";
 import { middlewareAuthentication } from "../../../shared/middleware";
 
-export const setScoreRoutes = (dbConn: Sequelize): void => {
+export const setScoreRoutes = (dbConn: Sequelize): Router => {
     dbConn.models["score"] = ScoreModel;
     const scoreRepository = new ScoreRepository(dbConn);
     const scoreQuery = new ScoreQueryHandler(dbConn);
     const scoreController = new ScoreController(scoreRepository, scoreQuery);
     const scoreRouter = express.Router();
+    const userRouter = express.Router();
+
+    userRouter.use(middlewareAuthentication);
 
     scoreRouter.post(
         "/score",
@@ -33,4 +36,6 @@ export const setScoreRoutes = (dbConn: Sequelize): void => {
         ":id",
         expressAsyncHandler(scoreController.deleteScore.bind(scoreController)),
     );
+
+    return scoreRouter;
 };

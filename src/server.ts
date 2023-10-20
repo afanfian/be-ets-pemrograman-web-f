@@ -9,6 +9,7 @@ import {
     logger,
 } from "./shared/util";
 import { setUserRoutes } from "./module/user/presentation/router";
+import { setScoreRoutes } from "./module/score/presentation/router";
 
 export class AppServer {
     app: Express;
@@ -28,6 +29,7 @@ export class AppServer {
 
         // set application routes
         this.app.use("/users", setUserRoutes(this.pgDatabase.dbConn));
+        this.app.use("/scores", setScoreRoutes(this.pgDatabase.dbConn));
 
         this.app.get("/health-check", (req: Request, res: Response) => {
             buildResponseSuccess(res, 200, "welcome to ETS Pemrgoraman Web F");

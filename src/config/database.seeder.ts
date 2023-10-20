@@ -15,6 +15,12 @@ export const seedDatabase = async (dbConn: Sequelize) => {
                 password: password,
             },
         });
+        await dbConn.models["score"].findOrCreate({
+            defaults: {
+                nama: "Fian",
+                score: "123",
+            },
+        });
         logger.info("database seeded");
     } catch (error) {
         logger.error(`unable to seed database: ${(error as Error).message}`);
